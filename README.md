@@ -29,6 +29,35 @@
 
 ---
 
+
+
+## Admin Panel
+
+To log in as the admin, use the following credentials:
+
+- **Username:** `admin`
+- **Password:** `password`
+
+---
+
+## Driver Panel
+
+For the driver panel, use the following credentials:
+
+- **Username:** `Driver`
+- **Password:** `driverpassword`
+
+---
+
+## User Login
+
+To log in as a user for testing purposes, use the following credentials:
+
+- **Username:** `aimeniqbal`
+- **Password:** `user1234`
+
+---
+
 ## Tech Stack
 
 - **Backend:** Python, Django, Django Channels (WebSockets for real-time tracking)
@@ -44,3 +73,5 @@
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/yourusername/eambulance.git
+
+
