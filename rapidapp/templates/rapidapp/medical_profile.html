@@ -1,0 +1,87 @@
+{% extends "rapidapp/base.html" %}
+{% block title %} Medical Profile {% endblock %}
+
+{% block content %}
+<div class="medical-profile-container">
+    <h2>Medical Profile for {{ user.username }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update Medical Profile</button>
+    </form>
+</div>
+
+<style>
+    .medical-profile-container {
+        max-width: 700px;
+        margin: 0px auto;
+        padding: 180px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h2 {
+        color: #cb0d1b;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        font-size: 16px;
+    }
+
+    form label {
+        font-weight: bold;
+        color: #081f3e;
+    }
+
+    .btn {
+        background-color: #006cff;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #cb0d1b;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .medical-profile-container {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        form input, form select, form textarea {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock content %}

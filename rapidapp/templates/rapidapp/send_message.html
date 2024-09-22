@@ -1,0 +1,37 @@
+<!-- send_message.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Message to Driver</title>
+</head>
+<body>
+    <h2>Send Message to Driver</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- This is where your form for sending messages will be rendered -->
+        <button type="submit">Send Message</button>
+    </form>
+
+    <!-- WebSocket script for real-time messaging -->
+    <script>
+        var socket = new WebSocket('ws://localhost:8000/ws/driver/');
+
+        socket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            console.log('Message from Driver:', data.message);
+        };
+
+        function sendMessage() {
+            var message = document.getElementById('messageInput').value;
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+        }
+    </script>
+
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+</body>
+</html>

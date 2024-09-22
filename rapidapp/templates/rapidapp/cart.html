@@ -1,0 +1,18 @@
+<h1>Your Cart</h1>
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    {% for item in cart_items %}
+    <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.product.price }}</td> <!-- This gives the price of one item -->
+        <td>{{ item.total }}</td> <!-- This gives the total for the quantity -->
+    </tr>
+    {% endfor %}
+</table>
+<h3>Total: {{ total_price }}</h3>
+<a href="{% url 'checkout' %}">Checkout</a>

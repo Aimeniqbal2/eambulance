@@ -1,0 +1,83 @@
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Your Ambulance Requests</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Ambulance</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for EmergencyRequest in orders %}
+                    <tr>
+                        <td>{{ EmergencyRequest.pk }}</td>
+                        <td>{{ EmergencyRequest.ambulance }}</td>
+                        <td>
+                            <span class="badge badge-pill 
+                                {% if EmergencyRequest.status == 'pending' %}
+                                    badge-warning
+                                {% elif EmergencyRequest.status == 'Accepted' %}
+                                    badge-info
+                                {% elif EmergencyRequest.status == 'completed' %}
+                                    badge-success
+                                {% else %}
+                                    badge-secondary
+                                {% endif %}">
+                                {{ EmergencyRequest.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ EmergencyRequest.created_at|date:"d M Y, H:i" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No ambulance requests yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add CSS for custom styling -->
+<style>
+    body {
+        background-color: #f7f7f7;
+        font-family: 'Arial', sans-serif;
+    }
+
+    h2 {
+        color: #006cff;
+    }
+
+    table {
+        background-color: #fff;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table thead th {
+        background-color: #006cff;
+        color: white;
+    }
+
+    .badge-pill {
+        padding: 0.6em 0.8em;
+    }
+
+    .container {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+</style>
+
+{% endblock %}
+

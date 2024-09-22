@@ -1,0 +1,12 @@
+<h1>Track Your Orders</h1>
+{% for order in orders %}
+    <div>
+        <h3>Order {{ order.id }} - {{ order.get_status_display }}</h3>
+        <p>Total: {{ order.total_price }}</p>
+        <ul>
+            {% for item in order.items.all %}
+                <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}

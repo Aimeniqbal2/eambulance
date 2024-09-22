@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Ambulance</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #081f3e;
+        }
+
+        h1 {
+            text-align: center;
+            color: #cb0d1b;
+            margin-top: 20px;
+            font-size: 2.5rem;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px;
+        }
+
+        #status {
+            font-weight: bold;
+            color: #006cff;
+        }
+
+        #map {
+            height: 300px;  /* Reduced height for medium size */
+            width: 80%;     /* Adjusted width for medium size */
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .first-aid-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .first-aid-container h2 {
+            color: #cb0d1b;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .first-aid-container ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #081f3e;
+        }
+
+        .first-aid-container ul li {
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            #map {
+                height: 250px;  /* Adjust for smaller screens */
+            }
+
+            .first-aid-container {
+                padding: 15px;
+            }
+
+            .first-aid-container ul li {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            #map {
+                height: 220px;  /* Adjust for very small screens */
+            }
+
+            .first-aid-container ul li {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Waiting for Ambulance</h1>
+    <p>Status: <span id="status">Waiting for a driver to accept your request...</span></p>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!-- First-Aid Instructions -->
+    <div class="first-aid-container">
+        <h2>First-Aid Instructions</h2>
+        <ul>
+            <li><strong>Check Breathing:</strong> Ensure the person is breathing normally. If not, begin CPR if you know how.</li>
+            <li><strong>Control Bleeding:</strong> Apply pressure to any bleeding wounds with a clean cloth or bandage.</li>
+            <li><strong>Position Comfortably:</strong> Keep the person calm and help them into a comfortable position, typically lying down.</li>
+            <li><strong>Stay Warm:</strong> Cover the person with a blanket or jacket to maintain body heat, especially if they’re in shock.</li>
+            <li><strong>Monitor Condition:</strong> Continue to monitor their breathing and response levels while waiting for the ambulance.</li>
+            <li><strong>Do Not Move:</strong> Avoid moving the person if you suspect any neck, head, or spinal injury unless absolutely necessary.</li>
+            <li><strong>Reassure:</strong> Reassure the person that help is on the way. Try to keep them calm and conscious.</li>
+        </ul>
+    </div>
+
+    <a href="{% url 'submit_feedback' %}">Submit Feedback</a>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([24.8607, 67.0011], 13);  // Initial Karachi location
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var marker = null;
+
+        // Initialize WebSocket
+        var ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+        var request_id = "{{ request_id }}";  // From Django context
+        var socket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/ambulance/' + request_id + '/');
+
+        socket.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+
+            // Update status
+            if (data.status) {
+                document.getElementById('status').innerText = data.status;
+            }
+
+            // Update ambulance location
+            if (data.location) {
+                var lat = data.location.lat;
+                var lng = data.location.lng;
+
+                if (marker) {
+                    marker.setLatLng([lat, lng]);  // Update marker position
+                } else {
+                    marker = L.marker([lat, lng]).addTo(map);  // Add marker on map
+                }
+
+                map.setView([lat, lng], 13);  // Center the map on the new location
+            }
+        };
+    </script>
+
+</body>
+</html>

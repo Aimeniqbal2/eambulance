@@ -1,0 +1,112 @@
+{% extends "rapidapp/base.html" %}
+{% block title %}Profile{% endblock title %}
+
+{% block content %}
+<div class="profile-container">
+    <h2>Update Your Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update Profile</button>
+    </form>
+
+    <div class="change-password-link">
+        <a href="{% url 'password_change' %}" class="btn-secondary">Change Password</a>
+    </div>
+</div>
+
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 0px auto;
+        background-color: #ffffff;
+        padding: 200px 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h2 {
+        color: #cb0d1b;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    form input, form select {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #f9f9f9;
+    }
+
+    form label {
+        font-weight: bold;
+        color: #081f3e;
+    }
+
+    .btn {
+        background-color: #006cff;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #cb0d1b;
+    }
+
+    .change-password-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn-secondary {
+        background-color: #081f3e;
+        color: #fff;
+        padding: 12px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #cb0d1b;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 20px;
+            margin: 30px auto;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        form input, form select {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .btn, .btn-secondary {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+</style>
+{% endblock content %}
