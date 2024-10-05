@@ -1,0 +1,75 @@
+{% extends "rapidapp/base.html" %}
+
+{% load static %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 200px;
+        }
+
+        .gallery-item {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gallery-item h3 {
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Ambulance Gallery</h1>
+
+<div class="gallery-container">
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance1.jpg' %}" alt="Ambulance 1">
+        
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance2.jpg' %}" alt="Ambulance 2">
+        
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance3.jpg' %}" alt="Ambulance 3">
+        
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance4.jpg' %}" alt="Ambulance 4">
+        
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance5.jpg' %}" alt="Ambulance 4">
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance6.jpg' %}" alt="Ambulance 4">
+    </div>
+    <div class="gallery-item">
+        <img src="{% static 'img/ambulance7.jpg' %}" alt="Ambulance 4">
+    </div>
+</div>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from PIL import Image
 
 
@@ -13,6 +13,18 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback from {self.user.username} - {self.rating}/5"
+
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name + " - " + self.email
 
 class Ambulance(models.Model):
     ambulance_number = models.CharField(max_length=20)
@@ -46,7 +58,10 @@ class EmergencyRequest(models.Model):
     pickup_address = models.TextField()
     emergency_type = models.CharField(max_length=50, choices=EMERGENCY_TYPE_CHOICES)
     request_time = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    accepted_at = models.DateTimeField(null=True, blank=True)
+
+    
+    status = models.CharField(max_length=50, choices=[('pending', 'Pending'), ('Accepted', 'Accepted'), ('enroute', 'Enroute'), ('completed', 'Completed')], default='Pending')
 
     def __str__(self):
         return f'{self.user.username} (ID: {self.user.id}) - {self.emergency_type}'
@@ -58,6 +73,7 @@ class MedicalProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     medical_history = models.TextField(blank=True, null=True)
     allergies = models.TextField(blank=True, null=True)
+    blood_type = models.CharField(max_length=10, blank=True, null=True)
     emergency_contact_name = models.CharField(max_length=100, blank=True, null=True)
     emergency_contact_phone = models.CharField(max_length=15, blank=True, null=True)
     search_fields = ['user__id', 'user__username']
@@ -110,3 +126,35 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity}"
+
+
+
+# ----------------------------------Driver/emts--------------------------------------------
+
+class Driver(AbstractUser):
+     # Add related_name arguments to avoid clashes
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='driver_set',  # Changed related_name to avoid conflict with User model
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='driver_permissions_set',  # Changed related_name to avoid conflict with User model
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+    contact_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    is_driver = models.BooleanField(default=True, verbose_name="Driver Status")  # Custom field to identify drivers
+    
+    def __str__(self):
+        return self.username  # Customize the display for admin
+
+
+
+        

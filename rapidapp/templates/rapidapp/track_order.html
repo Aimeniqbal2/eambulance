@@ -1,12 +1,122 @@
+{% extends "rapidapp/base.html"%}
+{% load static %}
+{% block content %}
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            padding-top: 200px;
+        }
+
+        .order-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-header h3 {
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .order-header p {
+            font-size: 1rem;
+            color: #28a745;
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .order-items {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-items li {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .order-items li::before {
+            content: "•";
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .order-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .order-total {
+                font-size: 1rem;
+            }
+
+            .order-items li {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
 <h1>Track Your Orders</h1>
-{% for order in orders %}
-    <div>
-        <h3>Order {{ order.id }} - {{ order.get_status_display }}</h3>
-        <p>Total: {{ order.total_price }}</p>
-        <ul>
+<div class="container">
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-header">
+            <h3>Order #{{ order.id }} - {{ order.get_status_display }}</h3>
+            <p>Status: {{ order.get_status_display }}</p>
+        </div>
+        <div class="order-total">Total: ${{ order.total_price|floatformat:2 }}</div>
+        <ul class="order-items">
             {% for item in order.items.all %}
                 <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
             {% endfor %}
         </ul>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
+
+</body>
+</html>
+{% endblock content %}

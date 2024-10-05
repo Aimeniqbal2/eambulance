@@ -1,13 +1,13 @@
 {% extends "rapidapp/base.html" %}
 {% block title %}Profile{% endblock title %}
-
+{% load static %}
 {% block content %}
 <div class="profile-container">
     <h2>Update Your Profile</h2>
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn">Update Profile</button>
+        <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
 
     <div class="change-password-link">
@@ -16,21 +16,27 @@
 </div>
 
 <style>
+    /* Overall layout and container styling */
     .profile-container {
         max-width: 600px;
-        margin: 0px auto;
+        margin: auto ;
         background-color: #ffffff;
-        padding: 200px 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 200px 20px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
         font-family: 'Poppins', sans-serif;
     }
 
+    /* Heading styling */
     h2 {
-        color: #cb0d1b;
+        color: #007bff;
         text-align: center;
         margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: bold;
     }
 
+    /* Form element styles */
     form {
         display: flex;
         flex-direction: column;
@@ -38,45 +44,54 @@
     }
 
     form input, form select {
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        padding: 14px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
         font-size: 16px;
         width: 100%;
         box-sizing: border-box;
-        background-color: #f9f9f9;
+        background-color: #f5f5f5;
+        transition: border-color 0.3s ease;
+    }
+
+    form input:focus, form select:focus {
+        border-color: #007bff;
+        outline: none;
     }
 
     form label {
         font-weight: bold;
-        color: #081f3e;
+        color: #333;
     }
 
-    .btn {
-        background-color: #006cff;
+    /* Primary button styling */
+    .btn-primary {
+        background-color: #007bff;
         color: #fff;
-        padding: 12px;
+        padding: 14px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 16px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        text-align: center;
     }
 
-    .btn:hover {
-        background-color: #cb0d1b;
+    .btn-primary:hover {
+        background-color: #0056b3;
     }
 
+    /* Change password button styling */
     .change-password-link {
         text-align: center;
         margin-top: 20px;
     }
 
     .btn-secondary {
-        background-color: #081f3e;
+        background-color: #6c757d;
         color: #fff;
         padding: 12px;
-        border-radius: 5px;
+        border-radius: 8px;
         font-size: 16px;
         text-decoration: none;
         display: inline-block;
@@ -84,29 +99,38 @@
     }
 
     .btn-secondary:hover {
-        background-color: #cb0d1b;
+        background-color: #343a40;
     }
 
-    /* Responsive design */
+    /* Responsive design adjustments */
     @media (max-width: 768px) {
         .profile-container {
             padding: 20px;
-            margin: 30px auto;
         }
 
         h2 {
-            font-size: 24px;
+            font-size: 1.8rem;
         }
 
         form input, form select {
             font-size: 14px;
-            padding: 10px;
+            padding: 12px;
         }
 
-        .btn, .btn-secondary {
+        .btn-primary, .btn-secondary {
             font-size: 14px;
             padding: 10px;
         }
     }
 </style>
+
+<script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+<!-- Popper js -->
+<script src="{% static 'js/popper.min.js' %}"></script>
+<!-- Bootstrap js -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- Plugins js -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<!-- Active js -->
+<script src="{% static 'js/active.js' %}"></script>
 {% endblock content %}

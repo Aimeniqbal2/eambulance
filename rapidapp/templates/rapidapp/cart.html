@@ -1,18 +1,127 @@
-<h1>Your Cart</h1>
-<table>
-    <tr>
+{% extends "rapidapp/base.html"%}
+{% load static %}
+{% block content %}
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    <table class="cart-table">
+        <thead>
+            <tr>
         <th>Product</th>
         <th>Quantity</th>
         <th>Price</th>
-    </tr>
-    {% for item in cart_items %}
-    <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.product.price }}</td> <!-- This gives the price of one item -->
-        <td>{{ item.total }}</td> <!-- This gives the total for the quantity -->
-    </tr>
-    {% endfor %}
-</table>
-<h3>Total: {{ total_price }}</h3>
-<a href="{% url 'checkout' %}">Checkout</a>
+        <th>Total</th> <!-- Add a header for total -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price|floatformat:2 }}</td> <!-- Price of one item -->
+                <td>{{ total|floatformat:2 }}</td> <!-- Total price for this item (price * quantity) -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <h3>Total: {{ total_price|floatformat:2 }}</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <a href="{% url 'checkout' %}" class="btn-checkout">Proceed to Checkout</a>
+        </form>
+        
+    </div>
+</div>
+
+<style>
+    .cart-container {
+        max-width: 900px;
+        margin: 0px auto;
+        padding: 200px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        color: #cb0d1b;
+        margin-bottom: 30px;
+    }
+
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+
+    .cart-table th, .cart-table td {
+        text-align: left;
+        padding: 15px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .cart-table th {
+        background-color: #081f3e;
+        color: #fff;
+    }
+
+    .cart-table td {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .cart-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    h3 {
+        color: #081f3e;
+        font-size: 1.5rem;
+    }
+
+    .btn-checkout {
+        background-color: #006cff;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-checkout:hover {
+        background-color: #cb0d1b;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .cart-summary {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+<!-- Popper js -->
+<script src="{% static 'js/popper.min.js' %}"></script>
+<!-- Bootstrap js -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- Plugins js -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<!-- Active js -->
+<script src="{% static 'js/active.js' %}"></script>
+{% endblock content %}

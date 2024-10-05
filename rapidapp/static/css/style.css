@@ -901,8 +901,8 @@ textarea {
 /* :: 12.0 Footer Area CSS */
 .footer-area {
   background-color: #020f20;
-  padding-left: 45px;
-  padding-right: 45px; }
+  height: 800px;
+  }
   @media only screen and (min-width: 992px) and (max-width: 1199px) {
     .footer-area {
       padding-left: 30px;
@@ -1156,7 +1156,7 @@ textarea {
   z-index: 1;
   width: 33.3333333%;
   display: inline-block;
-  float: left;
+  float: none;
   padding: 70px 40px 100px; }
   .singleServiceArea:first-child {
     background-color: #cb0d1b; }

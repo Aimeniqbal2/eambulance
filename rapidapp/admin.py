@@ -1,12 +1,12 @@
+from django.shortcuts import render, redirect, HttpResponse
+from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Ambulance, EmergencyRequest, MedicalProfile,  Product, Order, OrderItem, Feedback
-
+from .models import Ambulance, EmergencyRequest, MedicalProfile,  Product, Order, OrderItem, Feedback, Driver, Contact
 
 # Register your models here
-# .
-admin.site.unregister(User)
+
 # Create a custom UserAdmin
 class CustomUserAdmin(BaseUserAdmin):
     # Add 'id' to the list of displayed fields
@@ -15,9 +15,9 @@ class CustomUserAdmin(BaseUserAdmin):
     # Add search by ID functionality
     search_fields = ('id', 'username', 'email')
 
-# Re-register the User model with the custom UserAdmin
-admin.site.register(User, CustomUserAdmin)
-
+# # Re-register the User model with the custom UserAdmin
+# admin.site.unregister(User)
+# admin.site.register(User, CustomUserAdmin)
 admin.site.register(Ambulance)
 admin.site.register(EmergencyRequest)
 
@@ -33,16 +33,19 @@ class MedicalProfileAdmin(admin.ModelAdmin):
 # Re-register the MedicalProfile model with the custom admin settings
 admin.site.register(MedicalProfile, MedicalProfileAdmin)
 
-# Unregister EmergencyRequest if already registered
-admin.site.unregister(EmergencyRequest)
 
+admin.site.unregister(EmergencyRequest)
 class EmergencyRequestAdmin(admin.ModelAdmin):
     list_display = ['user', 'user_id', 'ambulance', 'request_time', 'status']
     search_fields = ['user__id', 'user__username']
+    list_filter = ['status']
 
     def user_id(self, obj):
         return obj.user.id
     user_id.short_description = 'User ID'
+   
+
+
 
 # Re-register EmergencyRequest with the custom admin settings
 admin.site.register(EmergencyRequest, EmergencyRequestAdmin)
@@ -84,3 +87,16 @@ class FeedbackAdmin(admin.ModelAdmin):
     list_display = ['user', 'rating', 'created_at']
     search_fields = ['user__username', 'rating']
 
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'created_at')
+    search_fields = ('name', 'email', 'subject')
+    list_filter = ('created_at',)
+
+
+@admin.register(Driver)
+class DriverAdmin(admin.ModelAdmin):
+    list_display = ('username', 'contact_number', 'address', 'is_active', 'is_driver')  # Show fields in admin list view
+    search_fields = ['username', 'contact_number']  # Enable search by username or contact
+    list_filter = ('is_active', 'is_driver')  # Add filters to easily manage active or inactive drivers
+    ordering = ['username']  # Order drivers by username by default

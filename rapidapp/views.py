@@ -3,12 +3,12 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout as auth_logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout as auth_logout, update_session_auth_hash, get_user_model
 from django.contrib import messages
 from django.views import View
 from django.contrib.messages.views import SuccessMessageMixin
-from .models import Ambulance, EmergencyRequest, MedicalProfile, EmergencyRequest, Product, CartItem, Order, OrderItem, Feedback
-from .form import EmergencyRequestForm, RegisterForm, LoginForm, ProfileUpdateForm, MedicalProfileForm, FeedbackForm
+from .models import Ambulance, EmergencyRequest, MedicalProfile, EmergencyRequest, Product, CartItem, Order, OrderItem, Feedback, Driver
+from .form import EmergencyRequestForm, RegisterForm, LoginForm, ProfileUpdateForm, MedicalProfileForm, FeedbackForm, DriverRegistrationForm, DriverLoginForm, ContactForm
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -32,8 +32,20 @@ def welcomecontact(request):
 def about(request):
     return render(request, 'rapidapp/aboutus.html')
 
+def gallery(request):
+    return render(request, 'rapidapp/gallery.html')
+
 def contact(request):
-    return render(request, 'rapidapp/contact.html')
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the form data to the database
+            messages.success(request, 'Thank you for contacting us! We will get back to you soon.')
+            return redirect('contact')  # Redirect to the same page after form submission
+    else:
+        form = ContactForm()
+    
+    return render(request, 'rapidapp/contact.html', {'form': form})
 
 
 def base_view(request):
@@ -323,6 +335,11 @@ def request_ambulance(request):
         form = EmergencyRequestForm()
         return render(request, 'rapidapp/request_ambulance.html', {'form': form})
 
+
+
+
+
+
 def driver_requests(request):
     return render(request, 'rapidapp/driver_requests.html')
 
@@ -397,35 +414,153 @@ def add_to_cart(request, product_id):
 # View Cart
 @login_required
 def cart_view(request):
-    cart_items = request.session.get('cart', [])
-    total_price = 0
-    items = []
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    
+    # Create a list to store item-specific totals
+    cart_totals = [(item, item.product.price * item.quantity) for item in cart_items]
+    
+    return render(request, 'rapidapp/cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'cart_totals': cart_totals  # Pass totals for each item
+    })
 
-    for item in cart_items:
-        product = get_object_or_404(Product, id=item['product_id'])
-        item_total = product.price * item['quantity']
-        total_price += item_total
-        items.append({'product': product, 'quantity': item['quantity'], 'total': item_total})
-
-    return render(request, 'rapidapp/cart.html', {'cart_items': items, 'total_price': total_price})
 
 # Checkout View
 @login_required
 def checkout_view(request):
-    cart_items = request.session.get('cart', [])
-    total_price = 0
-    items = []
+    cart_items = CartItem.objects.filter(user=request.user)
+    
+    # Calculate total price for each cart item
+    cart_totals = [(item, item.product.price * item.quantity) for item in cart_items]
 
-    for item in cart_items:
-        product = get_object_or_404(Product, id=item['product_id'])
-        item_total = product.price * item['quantity']
-        total_price += item_total
-        items.append({'product': product, 'quantity': item['quantity'], 'total': item_total})
+    # Calculate the total price of the cart
+    total_price = sum(total for item, total in cart_totals)
+    
+    if request.method == 'POST':
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price
+        )
 
-    return render(request, 'rapidapp/checkout.html', {'cart_items': items, 'total_price': total_price})
+        for item in cart_items:
+            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+            item.product.stock -= item.quantity
+            item.product.save()
 
+        cart_items.delete()
+        messages.success(request, 'Your order has been placed successfully.')
+        return redirect('track_order')
+
+    return render(request, 'rapidapp/checkout.html', {
+        'cart_items': cart_items,
+        'cart_totals': cart_totals,  # Pass cart totals for each item
+        'total_price': total_price   # Pass total price of the cart
+    })
 # Order Tracking View
 @login_required
 def track_order(request):
     orders = Order.objects.filter(user=request.user)
     return render(request, 'rapidapp/track_order.html', {'orders': orders})
+
+
+
+
+
+# ----------------------------------Driver/emts--------------------------------------------
+
+
+def register_driver(request):
+    if request.method == 'POST':
+        form = DriverRegistrationForm(request.POST)
+        if form.is_valid():
+            driver = form.save(commit=False)
+            driver.is_driver = True  # Mark the user as a driver
+            driver.save()
+            return redirect('login_driver')
+        else:
+            return render(request, 'rapidapp/register_driver.html', {'form': form})
+    else:
+        form = DriverRegistrationForm()
+        return render(request, 'rapidapp/register_driver.html', {'form': form})
+        
+
+Driver = get_user_model()
+
+
+def login_driver(request):
+    if request.method == 'POST':
+        form = DriverLoginForm(request.POST)
+        
+        if form.is_valid():
+            # Get the username and password from the cleaned form data
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            # Authenticate the user (driver)
+            driver = authenticate(request, username=username, password=password)
+
+            # If authentication is successful, log in the driver
+            if driver is not None:
+                login(request, driver)
+                return redirect('driver_dashboard')  # Redirect to the driver dashboard
+            else:
+                # If credentials are invalid
+                return render(request, 'rapidapp/login_driver.html', {'form': form, 'error': 'Invalid credentials'})
+
+    else:
+        form = DriverLoginForm()
+
+    return render(request, 'rapidapp/login_driver.html', {'form': form})
+
+
+
+
+
+def driver_dashboard(request):
+        # Fetch all active emergency requests
+    emergency_requests = EmergencyRequest.objects.all()  # or any other status you need
+
+    # Pass the emergency requests along with associated medical profiles to the template
+    context = {
+        'emergency_requests': emergency_requests,
+    }
+
+    return render(request, 'rapidapp/driver_dashboard.html', context)
+
+
+@login_required
+def update_request_status(request, request_id):
+
+    if request.method == 'POST':
+        # Get the emergency request object based on the ID
+        emergency_request = get_object_or_404(EmergencyRequest, id=request_id)
+        # Get the new status from the form submission
+        new_status = request.POST.get('status')
+    
+    if new_status in ['pending', 'Accepted', 'enroute', 'completed']:
+        # Update the status of the emergency request
+        emergency_request.status = new_status
+        emergency_request.save()
+        
+
+        # Notify waiting users via WebSocket (using Channels)
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"user_{emergency_request.user.id}",
+            {
+                'type': 'status_update',
+                'status': new_status,
+                'accepted_at': str(emergency_request.accepted_at)
+            }
+        )
+
+        #     # Optionally refresh the object to ensure changes are persisted
+        # emergency_request.refresh_from_db()
+        # # Redirect back to the driver dashboard or another appropriate page
+        # return redirect('driver_dashboard')
+
+    # In case it's a GET request or any other method, just redirect back to the dashboard
+    return redirect('driver_dashboard')
+

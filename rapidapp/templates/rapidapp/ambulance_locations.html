@@ -1,0 +1,34 @@
+{% extends "rapidapp/base_site.html" %}
+
+{% block title %}Ambulance Locations{% endblock %}
+
+{% block content %}
+  <h1>Ambulance Locations</h1>
+  
+  <!-- Map container -->
+  <div id="map" style="height: 500px;"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <script type="text/javascript">
+    // Initialize the map and set its view to your preferred location
+    var map = L.map('map').setView([24.8607, 67.0011], 12); // Karachi coordinates as a default
+
+    // Set up the OSM layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Define ambulance locations data passed from Django
+    var ambulanceLocations = { ambulance_locations , safe };
+
+    // Loop through the ambulance locations and add markers to the map
+    for (var i = 0; i < ambulanceLocations.length; i++) {
+      var ambulance = ambulanceLocations[i];
+      var marker = L.marker([ambulance.latitude, ambulance.longitude]).addTo(map)
+        .bindPopup("<b>Ambulance ID:</b> " + ambulance.id + "<br><b>Driver:</b> " + ambulance.driver);
+    }
+  </script>
+{% endblock %}

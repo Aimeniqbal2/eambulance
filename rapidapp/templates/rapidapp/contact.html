@@ -37,7 +37,7 @@
                 <div class="col-12">
                     <div class="breadcumb-content">
                         <h3 class="breadcumb-title">Contact</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetuer</p>
+                        
                     </div>
                 </div>
             </div>
@@ -53,18 +53,35 @@
                     <div class="contact-form">
                         <h5 class="mb-50">Get in touch</h5>
 
+                        {% if messages %}
+                        <div class="alert alert-success">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         <form action="#" method="post">
+                            {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" id="contact-name" placeholder="Name">
+                                {{ form.name.label_tag }}
+                                {{ form.name }}
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control" id="contact-email" placeholder="Email">
+                                {{ form.email.label_tag }}
+                                {{ form.email }}
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="message" id="message" cols="30" rows="10" placeholder="Message"></textarea>
+                                {{ form.subject.label_tag }}
+                                {{ form.subject }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.message.label_tag }}
+                                {{ form.message }}
                             </div>
                             <button type="submit" class="btn medilife-btn">Send Message <span>+</span></button>
                         </form>
+                        
+                    
                     </div>
                 </div>
 
@@ -125,16 +142,7 @@
         </div>
     </section>
 
-    <!-- Google Maps -->
-    <div class="map-area mb-100">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div id="googleMap" class="googleMap"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- ***** Footer Area Start ***** -->
     <footer class="footer-area section-padding-100">

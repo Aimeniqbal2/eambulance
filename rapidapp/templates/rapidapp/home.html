@@ -25,14 +25,14 @@
                             <div class="hero-slides-content">
                                 <h2 data-animation="fadeInUp" data-delay="100ms">Efficient and Immediate <br>24/7 Ambulance Services</h2>
                                 <h6 data-animation="fadeInUp" data-delay="400ms"></h6>
-                                <a href="rapidapp/request_ambulance" class="btn medilife-btn mt-50" data-animation="fadeInUp" data-delay="700ms">Book Ambulance <span>+</span></a>
+                                <a href="{% url 'request_ambulance'%}"class="btn medilife-btn mt-50" data-animation="fadeInUp" data-delay="700ms">Book Ambulance <span>+</span></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img bg-overlay-white" style="background-image: url(img/bg-img/breadcumb3.jpg);">
+            <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg4.jpg)">
                 <div class="container h-100">
                     <div class="row h-100 align-items-center">
                         <div class="col-12">
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <!-- Single Hero Slide -->
-            <div class="single-hero-slide bg-img bg-overlay-white" style="background-image: url(img/bg-img/breadcumb1.jpg);">
+            <div class="single-hero-slide bg-img " style="background-image: url(img/bg-img/bg4.jpg);">
                 <div class="container h-100">
                     <div class="row h-100 align-items-center">
                         <div class="col-12">
@@ -64,7 +64,7 @@
     <!-- ***** Hero Area End ***** -->
 
       <!-- ***** Book An Appoinment Area Start ***** -->
-      <div class="medilife-book-an-appoinment-area">
+      <div class="medilife-book-an-appoinment-area" style="margin-top: -200px;">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -95,7 +95,6 @@
                                             </div>
                                             <form method="POST">
                                                 {% csrf_token %}
-                                               
                                             <div class="col-12 col-md-2">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control" name="date" id="date" placeholder="Date">
@@ -316,14 +315,14 @@
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="features-content">
-                        <h2>A new way to treat pacients in a revolutionary facility</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing eli.Lorem ipsum dolor sit amet, consec tetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer.</p>
-                        <a href="#" class="btn medilife-btn mt-50">View the services <span>+</span></a>
+                        <h2>A New Way of Running Things</h2>
+                        <p>The world is evolving rapidly, and so are the ways we manage operations. Whether it's in business, healthcare, or technology, innovation is key to staying ahead. Embracing new systems and frameworks allows for increased efficiency, better decision-making, and a more agile response to challenges.</p>
+                        <a href="{% url 'services'%}" class="btn medilife-btn mt-50">View the services <span>+</span></a>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6">
                     <div class="features-thumbnail">
-                        <img src="{% static 'img/bg-img/medical1.png' %}" alt="">
+                        <img src="{% static 'img/ambu.jpg' %}" alt="">
                     </div>
                 </div>
             </div>
@@ -331,81 +330,7 @@
     </div>
     <!-- ***** Features Area End ***** -->
 
-    <!-- ***** Blog Area Start ***** -->
-    <div class="medilife-blog-area section-padding-100-0">
-        <div class="container">
-            <div class="row">
-                <!-- Single Blog Area -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-area mb-100">
-                        <!-- Post Thumbnail -->
-                        <div class="blog-post-thumbnail">
-                            <img src="{% static 'img/blog-img/1.jp' %}g" alt="">
-                            <!-- Post Date -->
-                            <div class="post-date">
-                                <a href="#">Jan 23, 2018</a>
-                            </div>
-                        </div>
-                        <!-- Post Content -->
-                        <div class="post-content">
-                            <div class="post-author">
-                                <a href="#"><img src="{% static 'img/blog-img/p1.jpg' %}" alt=""></a>
-                            </div>
-                            <a href="#" class="headline">New drog release soon</a>
-                            <p>Dolor sit amet, consecte tuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
-                            <a href="#" class="comments">3 Comments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Blog Area -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-area mb-100">
-                        <!-- Post Thumbnail -->
-                        <div class="blog-post-thumbnail">
-                            <img src="{% static 'img/blog-img/2.jpg' %}" alt="">
-                            <!-- Post Date -->
-                            <div class="post-date">
-                                <a href="#">Jan 23, 2018</a>
-                            </div>
-                        </div>
-                        <!-- Post Content -->
-                        <div class="post-content">
-                            <div class="post-author">
-                                <a href="#"><img src="{% static 'img/blog-img/p2.jpg' %}" alt=""></a>
-                            </div>
-                            <a href="#" class="headline">Free dental care</a>
-                            <p>Dolor sit amet, consecte tuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
-                            <a href="#" class="comments">3 Comments</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Blog Area -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-area mb-100">
-                        <!-- Post Thumbnail -->
-                        <div class="blog-post-thumbnail">
-                            <img src="{% static 'img/blog-img/3.jpg'%}" alt="">
-                            <!-- Post Date -->
-                            <div class="post-date">
-                                <a href="#">Jan 23, 2018</a>
-                            </div>
-                        </div>
-                        <!-- Post Content -->
-                        <div class="post-content">
-                            <div class="post-author">
-                                <a href="#"><img src="{% static 'img/blog-img/p3.jpg' %}" alt=""></a>
-                            </div>
-                            <a href="#" class="headline">Good news for the pacients</a>
-                            <p>Dolor sit amet, consecte tuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</p>
-                            <a href="#" class="comments">3 Comments</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ***** Blog Area End ***** -->
-
+    
     <!-- ***** Emergency Area Start ***** -->
     <div class="medilife-emergency-area section-padding-100-50">
         <div class="container">

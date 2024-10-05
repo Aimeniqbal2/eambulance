@@ -1,22 +1,120 @@
-<h1>Checkout</h1>
-<table>
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th> <!-- Add a header for total -->
-    </tr>
-    {% for item in cart_items %}
-    <tr>
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.product.price }}</td> <!-- Price of one item -->
-        <td>{{ item.total }}</td> <!-- This gives the total for the quantity -->
-    </tr>
-    {% endfor %}
-</table>
-<h3>Total: {{ total_price }}</h3>
-<form method="POST">
-    {% csrf_token %}
-    <button type="submit">Place Order</button>
-</form>
+{% extends "rapidapp/base.html"%}
+{% load static %}
+{% block content %}
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            padding-top: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            color: #333;
+        }
+
+        .total-price {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .btn-place-order {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 100px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-place-order:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+
+            .total-price {
+                font-size: 1.2rem;
+            }
+
+            .btn-place-order {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checkout</h1>
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.product.price|floatformat:2 }}</td>
+                    <td>${{ item.quantity|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            Total: ${{ total_price|floatformat:2 }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn-place-order">Place Order</button>
+        </form>
+    </div>
+
+</body>
+</html>
+{% endblock content %}

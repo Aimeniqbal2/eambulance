@@ -1,5 +1,5 @@
 from django import forms
-from .models import EmergencyRequest, MedicalProfile, Feedback
+from .models import EmergencyRequest, MedicalProfile, Feedback, Driver, Contact
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm, AuthenticationForm
 
@@ -110,4 +110,32 @@ class FeedbackForm(forms.ModelForm):
             'rating': forms.Select(),
         }
 
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'subject', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}),
+            'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Subject'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Your Message'}),
+        }
 
+
+# ---------------------------------Driver/Emts---------------------------------
+
+class DriverRegistrationForm(UserCreationForm):
+    class Meta:
+        model = Driver
+        fields = ['username', 'contact_number', 'address', 'password1', 'password2']
+
+    def save(self, commit=True):
+        driver = super().save(commit=False)
+        driver.is_driver = True  # This marks them as a driver
+        if commit:
+            driver.save()
+        return driver
+
+class DriverLoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)

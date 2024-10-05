@@ -113,6 +113,7 @@
 
     <h1>Waiting for Ambulance</h1>
     <p>Status: <span id="status">Waiting for a driver to accept your request...</span></p>
+    
 
     <!-- Map container -->
     <div id="map"></div>
@@ -172,6 +173,30 @@
             }
         };
     </script>
+<script>
+    var user_id = user.id ;
+    var statusDiv = document.getElementById('status');
+    var arrivalTimeDiv = document.getElementById('arrival_time');
+
+    // Create a new WebSocket connection
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/emergency/' + user_id + '/');
+
+    socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var status = data['status'];
+        var accepted_at = new Date(data['accepted_at']);
+        var arrival_time = new Date(accepted_at.getTime() + 15 * 60000); // Add 15 minutes
+
+        // Update the status and arrival time on the page
+        statusDiv.innerText = 'Status: ' + status;
+        if (status == 'accepted') {
+            arrivalTimeDiv.innerText = 'Estimated Arrival Time: ' + arrival_time.toLocaleTimeString();
+        }
+    };
+</script>
+
+<div id="status">Status: Waiting for a driver to accept your request...</div>
+<div id="arrival_time"></div>
 
 </body>
 </html>

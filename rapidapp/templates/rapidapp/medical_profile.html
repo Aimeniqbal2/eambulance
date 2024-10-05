@@ -1,6 +1,6 @@
 {% extends "rapidapp/base.html" %}
 {% block title %} Medical Profile {% endblock %}
-
+{% load static %}
 {% block content %}
 <div class="medical-profile-container">
     <h2>Medical Profile for {{ user.username }}</h2>
@@ -84,4 +84,13 @@
         }
     }
 </style>
+<script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+<!-- Popper js -->
+<script src="{% static 'js/popper.min.js' %}"></script>
+<!-- Bootstrap js -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- Plugins js -->
+<script src="{% static 'js/plugins.js' %}"></script>
+<!-- Active js -->
+<script src="{% static 'js/active.js' %}"></script>
 {% endblock content %}

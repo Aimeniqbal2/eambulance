@@ -12,6 +12,7 @@ urlpatterns = [
     path('welcomecontact/', views.welcomecontact, name='welcomecontact'),
     path('about/', views.about, name='aboutus'),
     path('contact/', views.contact, name='contact'),
+    path('gallery/', views.gallery, name='gallery'),
     path('driver_requests/', views.driver_requests, name='driver_requests'),
     path('base/', views.base_view, name='base'),
     path('register/', views.registerView.as_view(), name='register'),
@@ -31,15 +32,15 @@ urlpatterns = [
     path('cart/', views.cart_view, name='cart'),
     path('checkout/', views.checkout_view, name='checkout'),
     path('track_order/', views.track_order, name='track_order'),
-    # path('profile/', views.profile, name='profile'),
-    # path('change_password/', views.ChangePasswordView.as_view(), name='change_password'),
-    #   path('password-reset/', views.ResetPasswordView.as_view(), name='password_reset'),
+    path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
+    path('feedback_success/', views.feedback_success, name='feedback_success'),
+ 
 
-    # path('password-reset-confirm/<uidb64>/<token>/',
-    #      auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),
-    #      name='password_reset_confirm'),
+#  ---------------------------Driver/Emts--------------------------------------------
 
-    # path('password-reset-complete/',
-    #      auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
-    #      name='password_reset_complete'),
+    path('register_driver/', views.register_driver, name='register_driver'),
+    path('login_driver/', views.login_driver, name='login_driver'),
+    path('driver_dashboard/', views.driver_dashboard, name='driver_dashboard'),
+    path('update-emergency-status/<int:request_id>/', views.update_request_status, name='update_emergency_status'),
+    
 ]
